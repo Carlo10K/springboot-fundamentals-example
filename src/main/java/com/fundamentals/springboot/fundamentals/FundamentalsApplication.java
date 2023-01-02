@@ -1,5 +1,6 @@
 package com.fundamentals.springboot.fundamentals;
 
+import com.fundamentals.springboot.fundamentals.bean.BeanWithProperties;
 import com.fundamentals.springboot.fundamentals.bean.MyBean;
 import com.fundamentals.springboot.fundamentals.bean.MyBeanWithDependency;
 import com.fundamentals.springboot.fundamentals.component.ComponentDependency;
@@ -14,11 +15,13 @@ public class FundamentalsApplication implements CommandLineRunner {
 	private ComponentDependency componentDependency;
 	private MyBean myBean;
 	private MyBeanWithDependency myBeanWithDependency;
+	private BeanWithProperties beanWithProperties;
 
-	public FundamentalsApplication(@Qualifier("componentImplement") ComponentDependency componentDependency, MyBean myBean, MyBeanWithDependency myBeanWithDependency){
+	public FundamentalsApplication(@Qualifier("componentImplement") ComponentDependency componentDependency, MyBean myBean, MyBeanWithDependency myBeanWithDependency, BeanWithProperties beanWithProperties){
 		this.componentDependency = componentDependency;
 		this.myBean = myBean;
 		this.myBeanWithDependency = myBeanWithDependency;
+		this.beanWithProperties = beanWithProperties;
 	}
 
 	public static void main(String[] args) {
@@ -30,5 +33,6 @@ public class FundamentalsApplication implements CommandLineRunner {
 			componentDependency.sayHi();
 			myBean.print();
 			myBeanWithDependency.printWithDependency();
+			System.out.println(beanWithProperties.function());
 	}
 }
