@@ -5,6 +5,8 @@ import com.fundamentals.springboot.fundamentals.bean.MyBean;
 import com.fundamentals.springboot.fundamentals.bean.MyBeanWithDependency;
 import com.fundamentals.springboot.fundamentals.component.ComponentDependency;
 import com.fundamentals.springboot.fundamentals.pojo.UserPojo;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,6 +14,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class FundamentalsApplication implements CommandLineRunner {
+
+	private final Log LOGGER = LogFactory.getLog(FundamentalsApplication.class);
 
 	private ComponentDependency componentDependency;
 	private MyBean myBean;
@@ -38,5 +42,11 @@ public class FundamentalsApplication implements CommandLineRunner {
 			myBeanWithDependency.printWithDependency();
 			System.out.println(beanWithProperties.function());
 			System.out.println(userPojo.getEmail()+"-"+userPojo.getPassword());
+			try{
+				int var = 10/0;
+				LOGGER.debug("Mi valor es: "+var);
+			}catch(Exception e){
+				LOGGER.error("Error del app " + e.getMessage());
+			}
 	}
 }
