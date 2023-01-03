@@ -60,6 +60,21 @@ public class FundamentalsApplication implements CommandLineRunner {
 		userRepository.findAndSort("Ju", Sort.by("id").descending())
 				.forEach(user -> LOGGER.info("Usuario con metodo sort: "+user));
 
+		userRepository.findByName("Jhon").forEach(user -> LOGGER.info("usuario con querymethod: "+user));
+
+		LOGGER.info("usuario con querymethod name and email:" + userRepository.findByEmailAndName("vicente@domain.com", "Vicente")
+				.orElseThrow(()-> new RuntimeException("Usuario no encontrado")));
+
+		userRepository.findByNameLike("%M%").forEach(user -> LOGGER.info("usuario findByname LIke "+user));
+
+		userRepository.findByNameOrEmail(null, "pedro@domain.com").forEach(user -> LOGGER.info("usuario findbynameoremail "+user));
+
+		userRepository.findByBirthDateBetween(LocalDate.of(2022,1,1), LocalDate.of(2022,5,30))
+				.forEach(user -> LOGGER.info("usuario por birthdate: "+user));
+
+		userRepository.findByNameLikeOrderByIdDesc("%M%").forEach(user -> LOGGER.info("usuario encontrado con like y ordenado "+user));
+
+		userRepository.findByNameContainingOrderByIdAsc("M").forEach(user -> LOGGER.info("usuario encontrado con containing y ordenado "+user));
 	}
 
 
