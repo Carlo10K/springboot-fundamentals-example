@@ -4,13 +4,19 @@ import com.fundamentals.springboot.fundamentals.bean.BeanWithProperties;
 import com.fundamentals.springboot.fundamentals.bean.MyBean;
 import com.fundamentals.springboot.fundamentals.bean.MyBeanWithDependency;
 import com.fundamentals.springboot.fundamentals.component.ComponentDependency;
+import com.fundamentals.springboot.fundamentals.entity.User;
 import com.fundamentals.springboot.fundamentals.pojo.UserPojo;
+import com.fundamentals.springboot.fundamentals.repository.UserRepository;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 @SpringBootApplication
 public class FundamentalsApplication implements CommandLineRunner {
@@ -22,13 +28,17 @@ public class FundamentalsApplication implements CommandLineRunner {
 	private MyBeanWithDependency myBeanWithDependency;
 	private BeanWithProperties beanWithProperties;
 	private UserPojo userPojo;
+	private UserRepository userRepository;
 
-	public FundamentalsApplication(@Qualifier("componentImplement") ComponentDependency componentDependency, MyBean myBean, MyBeanWithDependency myBeanWithDependency, BeanWithProperties beanWithProperties, UserPojo userPojo){
+	public FundamentalsApplication(@Qualifier("componentImplement") ComponentDependency componentDependency,
+								   MyBean myBean, MyBeanWithDependency myBeanWithDependency,
+								   BeanWithProperties beanWithProperties, UserPojo userPojo, UserRepository userRepository) {
 		this.componentDependency = componentDependency;
 		this.myBean = myBean;
 		this.myBeanWithDependency = myBeanWithDependency;
 		this.beanWithProperties = beanWithProperties;
 		this.userPojo = userPojo;
+		this.userRepository = userRepository;
 	}
 
 	public static void main(String[] args) {
@@ -37,16 +47,42 @@ public class FundamentalsApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-			componentDependency.sayHi();
-			myBean.print();
-			myBeanWithDependency.printWithDependency();
-			System.out.println(beanWithProperties.function());
-			System.out.println(userPojo.getEmail()+"-"+userPojo.getPassword());
-			try{
-				int var = 10/0;
-				LOGGER.debug("Mi valor es: "+var);
-			}catch(Exception e){
-				LOGGER.error("Error del app " + e.getMessage());
-			}
+		//examples();
+		saveUsersInDataBase();
+	}
+
+	private void saveUsersInDataBase(){
+		User user1 = new User("Jhon","john@domain.com", LocalDate.of(2022,12,20));
+		User user2 = new User("Julie","julie@domain.com", LocalDate.of(2022,5,3));
+		User user3 = new User("Pedro","pedro@domain.com", LocalDate.of(2022,4,2));
+		User user4 = new User("Juan","juan@domain.com", LocalDate.of(2022,3,21));
+		User user5 = new User("Vicente","vicente@domain.com", LocalDate.of(2022,11,5));
+		User user6 = new User("Carlos","carlos@domain.com", LocalDate.of(2022,10,3));
+		User user7 = new User("Mikel","mikel@domain.com", LocalDate.of(2022,12,30));
+		User user8 = new User("Rolando","rolando@domain.com", LocalDate.of(2022,1,1));
+		User user9 = new User("Marco","marco@domain.com", LocalDate.of(2022,2,7));
+		User user10 = new User("Christian","christian@domain.com", LocalDate.of(2022,5,23));
+		User user11 = new User("Sergio","sergio@domain.com", LocalDate.of(2022,6,20));
+		User user12 = new User("David","david@domain.com", LocalDate.of(2022,7,15));
+		List<User> userList = Arrays.asList(user1,user2,user3,user4,user5,user6,user7,user8,user9,user10,user11,user12);
+
+		userList.stream().forEach(userRepository::save);
+
+	}
+
+
+
+	private void examples() {
+		componentDependency.sayHi();
+		myBean.print();
+		myBeanWithDependency.printWithDependency();
+		System.out.println(beanWithProperties.function());
+		System.out.println(userPojo.getEmail() + "-" + userPojo.getPassword());
+		try {
+			int var = 10 / 0;
+			LOGGER.debug("Mi valor es: " + var);
+		} catch (Exception e) {
+			LOGGER.error("Error del app " + e.getMessage());
+		}
 	}
 }
